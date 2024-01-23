@@ -8,21 +8,24 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var things = ["First Thing", "Second Thing", "Third Thing", "Fourth Thing", "Fifth Thing"]
+    @State private var toDoItems =
+            [ToDoItem(priority: "High", description: "Take out trash", dueDate: Date()),
+             ToDoItem(priority: "Medium", description: "Pick up clothes", dueDate: Date()),
+             ToDoItem(priority: "Low", description: "Eat a donut", dueDate: Date())]
     var body: some View {
         NavigationView {
             List {
-                ForEach(things, id: \.self) { thing in
-                    Text(thing)
+                ForEach(toDoItems) { item in
+                    Text(item.description)
                 }
                 .onMove(perform: { indices, newOffset in
-                    things.move(fromOffsets: indices, toOffset: newOffset)
+                    toDoItems.move(fromOffsets: indices, toOffset: newOffset)
                 })
                 .onDelete(perform: { indexSet in
-                    things.remove(atOffsets: indexSet)
+                    toDoItems.remove(atOffsets: indexSet)
                 })
             }
-            .navigationBarTitle("Things", displayMode: .inline)
+            .navigationBarTitle("To Do List", displayMode: .inline)
             .navigationBarItems(leading: EditButton())
         }
     }
@@ -30,4 +33,11 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+}
+
+struct ToDoItem: Identifiable {
+    var id = UUID()
+    var priority = String()
+    var description = String()
+    var dueDate = Date()
 }
